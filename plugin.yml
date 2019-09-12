@@ -9,10 +9,16 @@ depend:
 softdepend: ["AntiSpamPro"]
 extensions: [sqlite3]
 commands:
- f:
-  description: use /f help for all parameters
-  permission: f.command
+  f:
+    description: use /f help for all parameters
+    permission: f.command
+  shop:
+    description: "open shop ui"
+    permission: shop.command
 permissions:
- f.command:
-  default: true
-  description: "Allow use of all faction commands"
+  f.command:
+    default: true
+    description: "Allow use of all faction commands"
+  shop.command:
+    default: true
+    description: 'allows you to use shop command'

@@ -112,7 +112,15 @@ class FactionMain extends PluginBase implements Listener {
     }
 
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {
-        return $this->fCommand->onCommand($sender, $command, $label, $args);
+        switch ($command->getName()) {
+			case 'f':
+				return $this->fCommand->onCommand($sender, $command, $label, $args);
+			case 'shop':
+				$sender->sendMessage('opening shop');
+				return true;
+			default:
+				return false;
+		}
     }
 
     public function onDisable() {
