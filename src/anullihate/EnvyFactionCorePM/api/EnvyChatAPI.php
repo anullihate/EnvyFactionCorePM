@@ -9,6 +9,7 @@
 namespace anullihate\EnvyFactionCorePM\api;
 
 
+use _64FF00\PurePerms\PPGroup;
 use anullihate\EnvyFactionCorePM\FactionMain;
 use pocketmine\Player;
 use pocketmine\utils\TextFormat;
@@ -72,10 +73,10 @@ class EnvyChatAPI {
 		{
 			$string = str_replace("{msg}", $this->stripColors($message), $string);
 		}
-		if($this->factionsAPI !== null)
+		if($this->main->factionsAPI !== null)
 		{
-			$string = str_replace("{fac_name}", $this->factionsAPI->getPlayerFaction($player), $string);
-			$string = str_replace("{fac_rank}", $this->factionsAPI->getPlayerRank($player), $string);
+			$string = str_replace("{fac_name}", $this->main->factionsAPI->getPlayerFaction($player), $string);
+			$string = str_replace("{fac_rank}", $this->main->factionsAPI->getPlayerRank($player), $string);
 		}
 		else
 		{
@@ -122,56 +123,56 @@ class EnvyChatAPI {
 	public function getOriginalChatFormat(Player $player, $levelName = null)
 	{
 		/** @var \_64FF00\PurePerms\PPGroup $group */
-		$group = $this->purePerms->getUserDataMgr()->getGroup($player, $levelName);
+		$group = $this->main->purePerms->getUserDataMgr()->getGroup($player, $levelName);
 		if($levelName === null)
 		{
-			if($this->config->getNested("groups." . $group->getName() . ".chat") === null)
+			if($this->main->config->getNested("groups." . $group->getName() . ".chat") === null)
 			{
 				$this->getLogger()->critical("Invalid chat format found in config.yml (Group: " . $group->getName() . ") / Setting it to default value.");
-				$this->config->setNested("groups." . $group->getName() . ".chat", "&8&l[" . $group->getName() . "]&f&r {display_name} &7> {msg}");
-				$this->config->save();
-				$this->config->reload();
+				$this->main->config->setNested("groups." . $group->getName() . ".chat", "&8&l[" . $group->getName() . "]&f&r {display_name} &7> {msg}");
+				$this->main->config->save();
+				$this->main->config->reload();
 			}
-			return $this->config->getNested("groups." . $group->getName() . ".chat");
+			return $this->main->config->getNested("groups." . $group->getName() . ".chat");
 		}
 		else
 		{
-			if($this->config->getNested("groups." . $group->getName() . "worlds.$levelName.chat") === null)
+			if($this->main->config->getNested("groups." . $group->getName() . "worlds.$levelName.chat") === null)
 			{
 				$this->getLogger()->critical("Invalid chat format found in config.yml (Group: " . $group->getName() . ", WorldName = $levelName) / Setting it to default value.");
-				$this->config->setNested("groups." . $group->getName() . "worlds.$levelName.chat", "&8&l[" . $group->getName() . "]&f&r {display_name} &7> {msg}");
-				$this->config->save();
-				$this->config->reload();
+				$this->main->config->setNested("groups." . $group->getName() . "worlds.$levelName.chat", "&8&l[" . $group->getName() . "]&f&r {display_name} &7> {msg}");
+				$this->main->config->save();
+				$this->main->config->reload();
 			}
-			return $this->config->getNested("groups." . $group->getName() . "worlds.$levelName.chat");
+			return $this->main->config->getNested("groups." . $group->getName() . "worlds.$levelName.chat");
 		}
 	}
 
 	public function getOriginalNametag(Player $player, $levelName = null)
 	{
 		/** @var \_64FF00\PurePerms\PPGroup $group */
-		$group = $this->purePerms->getUserDataMgr()->getGroup($player, $levelName);
+		$group = $this->main->purePerms->getUserDataMgr()->getGroup($player, $levelName);
 		if($levelName === null)
 		{
-			if($this->config->getNested("groups." . $group->getName() . ".nametag") === null)
+			if($this->main->config->getNested("groups." . $group->getName() . ".nametag") === null)
 			{
-				$this->getLogger()->critical("Invalid nametag found in config.yml (Group: " . $group->getName() . ") / Setting it to default value.");
-				$this->config->setNested("groups." . $group->getName() . ".nametag", "&8&l[" . $group->getName() . "]&f&r {display_name}");
-				$this->config->save();
-				$this->config->reload();
+				$this->main->getLogger()->critical("Invalid nametag found in config.yml (Group: " . $group->getName() . ") / Setting it to default value.");
+				$this->main->config->setNested("groups." . $group->getName() . ".nametag", "&8&l[" . $group->getName() . "]&f&r {display_name}");
+				$this->main->config->save();
+				$this->main->config->reload();
 			}
-			return $this->config->getNested("groups." . $group->getName() . ".nametag");
+			return $this->main->config->getNested("groups." . $group->getName() . ".nametag");
 		}
 		else
 		{
-			if($this->config->getNested("groups." . $group->getName() . "worlds.$levelName.nametag") === null)
+			if($this->main->config->getNested("groups." . $group->getName() . "worlds.$levelName.nametag") === null)
 			{
-				$this->getLogger()->critical("Invalid nametag found in config.yml (Group: " . $group->getName() . ", WorldName = $levelName) / Setting it to default value.");
-				$this->config->setNested("groups." . $group->getName() . "worlds.$levelName.nametag", "&8&l[" . $group->getName() . "]&f&r {display_name}");
-				$this->config->save();
-				$this->config->reload();
+				$this->main->getLogger()->critical("Invalid nametag found in config.yml (Group: " . $group->getName() . ", WorldName = $levelName) / Setting it to default value.");
+				$this->main->config->setNested("groups." . $group->getName() . "worlds.$levelName.nametag", "&8&l[" . $group->getName() . "]&f&r {display_name}");
+				$this->main->config->save();
+				$this->main->config->reload();
 			}
-			return $this->config->getNested("groups." . $group->getName() . "worlds.$levelName.nametag");
+			return $this->main->config->getNested("groups." . $group->getName() . "worlds.$levelName.nametag");
 		}
 	}
 
@@ -184,11 +185,11 @@ class EnvyChatAPI {
 	{
 		if($levelName === null)
 		{
-			return $this->purePerms->getUserDataMgr()->getNode($player, "prefix");
+			return $this->main->purePerms->getUserDataMgr()->getNode($player, "prefix");
 		}
 		else
 		{
-			$worldData = $this->purePerms->getUserDataMgr()->getWorldData($player, $levelName);
+			$worldData = $this->main->purePerms->getUserDataMgr()->getWorldData($player, $levelName);
 			if(!isset($worldData["prefix"]) || $worldData["prefix"] === null)
 				return "";
 			return $worldData["prefix"];
@@ -204,11 +205,11 @@ class EnvyChatAPI {
 	{
 		if($levelName === null)
 		{
-			return $this->purePerms->getUserDataMgr()->getNode($player, "suffix");
+			return $this->main->purePerms->getUserDataMgr()->getNode($player, "suffix");
 		}
 		else
 		{
-			$worldData = $this->purePerms->getUserDataMgr()->getWorldData($player, $levelName);
+			$worldData = $this->main->purePerms->getUserDataMgr()->getWorldData($player, $levelName);
 			if(!isset($worldData["suffix"]) || $worldData["suffix"] === null)
 				return "";
 			return $worldData["suffix"];
@@ -225,14 +226,14 @@ class EnvyChatAPI {
 	{
 		if($levelName === null)
 		{
-			$this->config->setNested("groups." . $group->getName() . ".chat", $chatFormat);
+			$this->main->config->setNested("groups." . $group->getName() . ".chat", $chatFormat);
 		}
 		else
 		{
-			$this->config->setNested("groups." . $group->getName() . "worlds.$levelName.chat", $chatFormat);
+			$this->main->config->setNested("groups." . $group->getName() . "worlds.$levelName.chat", $chatFormat);
 		}
-		$this->config->save();
-		$this->config->reload();
+		$this->main->config->save();
+		$this->main->config->reload();
 		return true;
 	}
 
@@ -246,14 +247,14 @@ class EnvyChatAPI {
 	{
 		if($levelName === null)
 		{
-			$this->config->setNested("groups." . $group->getName() . ".nametag", $nameTag);
+			$this->main->config->setNested("groups." . $group->getName() . ".nametag", $nameTag);
 		}
 		else
 		{
-			$this->config->setNested("groups." . $group->getName() . "worlds.$levelName.nametag", $nameTag);
+			$this->main->config->setNested("groups." . $group->getName() . "worlds.$levelName.nametag", $nameTag);
 		}
-		$this->config->save();
-		$this->config->reload();
+		$this->main->config->save();
+		$this->main->config->reload();
 		return true;
 	}
 
@@ -267,13 +268,13 @@ class EnvyChatAPI {
 	{
 		if($levelName === null)
 		{
-			$this->purePerms->getUserDataMgr()->setNode($player, "prefix", $prefix);
+			$this->main->purePerms->getUserDataMgr()->setNode($player, "prefix", $prefix);
 		}
 		else
 		{
-			$worldData = $this->purePerms->getUserDataMgr()->getWorldData($player, $levelName);
+			$worldData = $this->main->purePerms->getUserDataMgr()->getWorldData($player, $levelName);
 			$worldData["prefix"] = $prefix;
-			$this->purePerms->getUserDataMgr()->setWorldData($player, $levelName, $worldData);
+			$this->main->purePerms->getUserDataMgr()->setWorldData($player, $levelName, $worldData);
 		}
 		return true;
 	}
@@ -288,13 +289,13 @@ class EnvyChatAPI {
 	{
 		if($levelName === null)
 		{
-			$this->purePerms->getUserDataMgr()->setNode($player, "suffix", $suffix);
+			$this->main->purePerms->getUserDataMgr()->setNode($player, "suffix", $suffix);
 		}
 		else
 		{
-			$worldData = $this->purePerms->getUserDataMgr()->getWorldData($player, $levelName);
+			$worldData = $this->main->purePerms->getUserDataMgr()->getWorldData($player, $levelName);
 			$worldData["suffix"] = $suffix;
-			$this->purePerms->getUserDataMgr()->setWorldData($player, $levelName, $worldData);
+			$this->main->purePerms->getUserDataMgr()->setWorldData($player, $levelName, $worldData);
 		}
 		return true;
 	}

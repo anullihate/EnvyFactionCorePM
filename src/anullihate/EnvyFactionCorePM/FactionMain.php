@@ -6,6 +6,7 @@ namespace anullihate\EnvyFactionCorePM;
 
 use anullihate\EnvyFactionCorePM\api\EnvyChatAPI;
 use anullihate\EnvyFactionCorePM\api\FactionAPI;
+use anullihate\EnvyFactionCorePM\listeners\EnvyChatListener;
 use pocketmine\plugin\PluginBase;
 use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
@@ -20,9 +21,13 @@ use pocketmine\math\Vector3;
 
 class FactionMain extends PluginBase implements Listener {
 
+	public $config;
+
 	// API
 	public $eChatAPI;
 	public $factionAPI;
+
+	public $purePerms;
 
     public $db;
     public $prefs;
@@ -34,14 +39,24 @@ class FactionMain extends PluginBase implements Listener {
     public $factionChatActive = [];
     public $allyChatActive = [];
 
-    public function onEnable() {
+    public function onLoad() {
+    	$this->saveDefaultConfig();
+    	$this->config = new Config($this->getDataFolder() . "config.yml", Config::YAML);
+
+    	$this->purePerms = $this->getServer()->getPluginManager()->getPlugin("PurePerms");
+		$this->loadAPI();
+	}
+
+	public function onEnable() {
         @mkdir($this->getDataFolder());
         if (!file_exists($this->getDataFolder() . "BannedNames.txt")) {
             $file = fopen($this->getDataFolder() . "BannedNames.txt", "w");
             $txt = "Admin:admin:Staff:staff:Owner:owner:Builder:builder:Op:OP:op";
             fwrite($file, $txt);
         }
+
         $this->getServer()->getPluginManager()->registerEvents(new FactionListener($this), $this);
+        $this->getServer()->getPluginManager()->registerEvents(new EnvyChatListener($this), $this);
         $this->antispam = $this->getServer()->getPluginManager()->getPlugin("AntiSpamPro");
         if (!$this->antispam) {
             $this->getLogger()->info("Add AntiSpamPro to ban rude Faction names");
@@ -94,8 +109,6 @@ class FactionMain extends PluginBase implements Listener {
             Server::getInstance()->getLogger()->info(TextFormat::GREEN . "FactionPro: Added 'world' column to plots");
         } catch (\ErrorException $ex) {
         }
-
-        $this->loadAPI();
     }
 
     public function onCommand(CommandSender $sender, Command $command, string $label, array $args): bool {

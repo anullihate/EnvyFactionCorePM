@@ -4,6 +4,8 @@ description: Factions Plugin for EnvyGames Faction Server
 version: 1.3.20
 main: anullihate\EnvyFactionCorePM\FactionMain
 api: [3.0.0]
+depend:
+  - "PurePerms"
 softdepend: ["AntiSpamPro"]
 extensions: [sqlite3]
 commands:
