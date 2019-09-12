@@ -352,4 +352,29 @@ class FactionAPI {
 				TextFormat::ITALIC . TextFormat::YELLOW . "<$playername>");
 		}
 	}
+
+	/****************************************************************/
+
+	/**
+	 * @param Player $player
+	 * @return string
+	 */
+	public function getPlayerRank(Player $player) {
+		if($this->isInFaction($player->getName()))
+		{
+			if($this->isOfficer($player->getName())) {
+				return '*';
+			}
+			elseif($this->isLeader($player->getName()))
+			{
+				return '**';
+			}
+			else
+			{
+				return '';
+			}
+		}
+		// TODO
+		return '';
+	}
 }

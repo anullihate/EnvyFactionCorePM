@@ -75,7 +75,7 @@ class EnvyChatAPI {
 		}
 		if($this->main->factionAPI !== null)
 		{
-			$string = str_replace("{fac_name}", $this->main->factionAPI->getPlayerFaction($player), $string);
+			$string = str_replace("{fac_name}", $this->main->factionAPI->getFaction($player->getName()), $string);
 			$string = str_replace("{fac_rank}", $this->main->factionAPI->getPlayerRank($player), $string);
 		}
 		else
