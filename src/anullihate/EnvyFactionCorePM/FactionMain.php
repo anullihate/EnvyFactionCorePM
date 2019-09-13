@@ -6,7 +6,9 @@ namespace anullihate\EnvyFactionCorePM;
 
 use anullihate\EnvyFactionCorePM\api\EnvyChatAPI;
 use anullihate\EnvyFactionCorePM\api\FactionAPI;
+use anullihate\EnvyFactionCorePM\commands\MultiWorldCommand;
 use anullihate\EnvyFactionCorePM\listeners\EnvyChatListener;
+use anullihate\EnvyFactionCorePM\listeners\MultiWorldListener;
 use pocketmine\plugin\PluginBase;
 use pocketmine\command\CommandSender;
 use pocketmine\command\Command;
@@ -20,6 +22,8 @@ use pocketmine\block\Snow;
 use pocketmine\math\Vector3;
 
 class FactionMain extends PluginBase implements Listener {
+
+	private static $instance;
 
 	public $config;
 
@@ -40,6 +44,7 @@ class FactionMain extends PluginBase implements Listener {
     public $allyChatActive = [];
 
     public function onLoad() {
+    	self::$instance = $this;
     	$this->saveDefaultConfig();
     	$this->config = new Config($this->getDataFolder() . "config.yml", Config::YAML);
 
@@ -55,8 +60,11 @@ class FactionMain extends PluginBase implements Listener {
             fwrite($file, $txt);
         }
 
+        $this->getServer()->getCommandMap()->register("envymw", new MultiWorldCommand());
+
         $this->getServer()->getPluginManager()->registerEvents(new FactionListener($this), $this);
         $this->getServer()->getPluginManager()->registerEvents(new EnvyChatListener($this), $this);
+        $this->getServer()->getPluginManager()->registerEvents(new MultiWorldListener($this), $this);
         $this->antispam = $this->getServer()->getPluginManager()->getPlugin("AntiSpamPro");
         if (!$this->antispam) {
             $this->getLogger()->info("Add AntiSpamPro to ban rude Faction names");
@@ -130,5 +138,9 @@ class FactionMain extends PluginBase implements Listener {
     private function loadAPI() {
 		$this->eChatAPI = new EnvyChatAPI($this);
 		$this->factionAPI = new FactionAPI($this);
+	}
+
+	public static function getInstance() : FactionMain {
+    	return self::$instance;
 	}
 }

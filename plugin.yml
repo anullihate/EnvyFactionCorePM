@@ -22,3 +22,10 @@ permissions:
   shop.command:
     default: true
     description: 'allows you to use shop command'
+  envymw.cmd:
+    default: op
+    description: Permission for all envymultiworld commands
+    children:
+      envymw.cmd.teleport:
+        description: Permission for /envymw teleport
+        default: op
